@@ -8,6 +8,7 @@ class App {
   }
   public start() {
     App.Log.info('start21')
+    App.Log.error('错误')
   }
 }
 const app = new App()
