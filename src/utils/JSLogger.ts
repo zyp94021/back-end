@@ -5,6 +5,7 @@ export enum Level {
   INFO,
   NORMAL
 }
+
 export class JSLogger {
   private level: Level = Level.NORMAL
   constructor(config = { level: Level.NORMAL }) {
@@ -13,6 +14,10 @@ export class JSLogger {
   private get now() {
     return new Date()
   }
+  private static _Inst: JSLogger
+  private static Inst() {
+    return (this._Inst = this._Inst || new JSLogger({ level: Level.NORMAL }))
+  }
 
   private _log(level: Level, log: any, file_log: any) {
     if (this.level >= level) {
@@ -20,17 +25,29 @@ export class JSLogger {
       this.writeLog(level, `[${this.now.toLocaleString()}] ${file_log}`)
     }
   }
-  public log(log: any) {
-    this._log(Level.NORMAL, log, log)
+  public static log(log: any) {
+    this.Inst()._log(Level.NORMAL, JSON.stringify(log), JSON.stringify(log))
   }
-  public info(log: any) {
-    this._log(Level.INFO, `\x1b[34m[info]\x1b[0m ${log}`, `[info] ${log}`)
+  public static info(log: any) {
+    this.Inst()._log(
+      Level.INFO,
+      `\x1b[34m[info]\x1b[0m ${JSON.stringify(log)}`,
+      `[info] ${JSON.stringify(log)}`
+    )
   }
-  public warn(log: any) {
-    this._log(Level.WARN, `\x1b[33m[warn]\x1b[0m ${log}`, `[warn] ${log}`)
+  public static warn(log: any) {
+    this.Inst()._log(
+      Level.WARN,
+      `\x1b[33m[warn]\x1b[0m ${JSON.stringify(log)}`,
+      `[warn] ${JSON.stringify(log)}`
+    )
   }
-  public error(log: any) {
-    this._log(Level.ERROR, `\x1b[31m[error]\x1b[0m ${log}`, `[error] ${log}`)
+  public static error(log: any) {
+    this.Inst()._log(
+      Level.ERROR,
+      `\x1b[31m[error]\x1b[0m ${JSON.stringify(log)}`,
+      `[error] ${JSON.stringify(log)}`
+    )
   }
   private async writeLog(level: Level, log: string) {
     let dir = './log'
