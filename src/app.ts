@@ -6,7 +6,7 @@ import { Server } from 'http'
 import { createKoaServer } from 'routing-controllers'
 import { UserController } from './controller/UserController'
 class App {
-  constructor() {}
+  constructor() { }
   private server: Server
   private io: socketIo.Server
   public startHttp() {
@@ -19,7 +19,6 @@ class App {
     this.server = app.listen(3001)
     console.log(`listen on 3001
         click http://localhost:3001/
-        or http://10.1.100.88:3001/
     `)
   }
   public startWs() {
