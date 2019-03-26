@@ -1,41 +1,21 @@
-import { connect, config } from '../DB'
 import { JSLogger } from '../utils/JSLogger'
-import { MongoClient } from 'mongodb'
-import User from '../model/User'
+import { User } from '../model/User'
+import * as mongoose from 'mongoose'
 
-export const register = (collection: string, json: User) => {
-  return new Promise(async (resolve, reject) => {
-    const db = (await connect()) as MongoClient
-    const dbo = db.db(config.db)
-    dbo.collection(collection).insertOne(json, (err, res) => {
-      if (err) JSLogger.error(err)
-      db.close()
-      resolve()
-    })
-  })
-}
-export const findUser = (collection: string, json) => {
-  return new Promise(async (resolve, reject) => {
-    const db = (await connect()) as MongoClient
-    const dbo = db.db(config.db)
-    dbo
-      .collection(collection)
-      .find(json)
-      .toArray((err, res) => {
-        if (err) JSLogger.error(err)
-        db.close()
-        resolve(res)
-      })
-  })
-}
-export const findOneUser = (collection: string, json) => {
-  return new Promise(async (resolve, reject) => {
-    const db = (await connect()) as MongoClient
-    const dbo = db.db(config.db)
-    dbo.collection(collection).findOne(json, (err, res) => {
-      if (err) JSLogger.error(err)
-      db.close()
-      resolve(res)
-    })
-  })
+mongoose.connect('mongodb://localhost:27017/demo', {
+  useNewUrlParser: true
+})
+export class UserServive {
+  static async register({ username, password }) {
+    const user = await User.findOne({ username, password }).exec()
+    if (user) {
+      JSLogger.info('用户存在')
+      return '用户存在'
+    }
+    return await User.create(new User({ username, password }))
+  }
+  static async login({ username, password }) {
+    const user = await User.findOne({ username, password })
+    return user || '密码错误'
+  }
 }

@@ -1,18 +1,21 @@
+import 'reflect-metadata'
 import * as Koa from 'koa'
 import { log } from './logger'
-import * as bodyparser from 'koa-bodyparser'
-import routers from './controller/index'
 import * as socketIo from 'socket.io'
 import { Server } from 'http'
+import { createKoaServer } from 'routing-controllers'
+import { UserController } from './controller/UserController'
 class App {
   constructor() {}
   private server: Server
   private io: socketIo.Server
   public startHttp() {
-    const app = new Koa()
+    const app: Koa = createKoaServer({
+      controllers: [UserController]
+    })
     app.use(log())
-    app.use(bodyparser())
-    app.use(routers.routes())
+    // app.use(bodyparser())
+    // app.use(routers.routes())
     this.server = app.listen(3001)
     console.log(`listen on 3001
         click http://localhost:3001/
