@@ -1,37 +1,34 @@
 import * as Koa from 'koa'
-import * as Ws from 'ws'
 import { log } from './logger'
 import * as bodyparser from 'koa-bodyparser'
 import routers from './controller/index'
-
+import * as socketIo from 'socket.io'
+import { Server } from 'http'
 class App {
   constructor() {}
+  private server: Server
+  private io: socketIo.Server
   public startHttp() {
     const app = new Koa()
     app.use(log())
     app.use(bodyparser())
-
     app.use(routers.routes())
-    app.listen(3000)
-    console.log(`listen on 3000
-        click http://localhost:3000/
-        or http://10.1.100.88:3000/
+    this.server = app.listen(3001)
+    console.log(`listen on 3001
+        click http://localhost:3001/
+        or http://10.1.100.88:3001/
     `)
   }
   public startWs() {
-    const wss = new Ws.Server({
-      port: 3001
-    })
-
-    wss.on('connection', ws => {
-      console.log(`[SERVER] connection()`)
-      ws.on('message', message => {
-        console.log(`[SERVER] received:${message}`)
-        ws.send(`ECHO:${message}`, err => {
-          if (err) {
-            console.log(`[SERVER] error:${err}`)
-          }
-        })
+    this.io = socketIo(this.server)
+    this.io.on('connect', (socket: any) => {
+      console.log('Connected client on port %s.', 3000)
+      socket.on('message', (m: any) => {
+        console.log('[server](message): %s', JSON.stringify(m))
+        this.io.emit('message', m)
+      })
+      socket.on('disconnect', () => {
+        console.log('Client disconnected')
       })
     })
   }
