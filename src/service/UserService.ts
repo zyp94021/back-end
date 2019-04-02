@@ -1,6 +1,8 @@
 import { JSLogger } from '../utils/JSLogger'
 import { User } from '../model/User'
 import * as mongoose from 'mongoose'
+import ReMsg from '../ReMsg'
+import * as jwt from 'jsonwebtoken'
 
 mongoose.connect('mongodb://localhost:27017/demo', {
   useNewUrlParser: true
@@ -16,6 +18,15 @@ export class UserServive {
   }
   static async login({ username, password }) {
     const user = await User.findOne({ username, password })
-    return user || '密码错误'
+    if (user) {
+      const token = jwt.sign({ username: user.username }, 'jwttest')
+      return new ReMsg({ token })
+    } else {
+      return new ReMsg('用户不存在', 401)
+    }
+  }
+  static async findOneByUsername({ username }) {
+    const user = await User.findOne({ username })
+    return user
   }
 }
