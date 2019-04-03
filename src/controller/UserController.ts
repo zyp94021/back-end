@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Authorized } from 'routing-controllers'
 import { UserServive } from '../service/UserService'
 @Controller()
 export class UserController {
-  @Authorized()
   @Get('/get')
   get() {
     return 'get'
