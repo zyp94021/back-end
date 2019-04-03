@@ -15,6 +15,7 @@ class App {
   private io: socketIo.Server
   public startHttp() {
     const app: Koa = createKoaServer({
+      cors: true,
       controllers: [UserController],
       authorizationChecker: async (action: Action) => {
         const token = action.request.headers['authorization']
