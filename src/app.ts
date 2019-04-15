@@ -4,10 +4,12 @@ import { log } from './logger'
 import * as socketIo from 'socket.io'
 import { Server } from 'http'
 import { createKoaServer, Action } from 'routing-controllers'
+import { useSocketServer } from 'socket-controllers'
 import { UserController } from './controller/UserController'
 import { JSLogger } from './utils/JSLogger'
 import * as jwt from 'jsonwebtoken'
 import { UserServive } from './service/UserService'
+import { MessageController } from './controller/MessageController'
 
 class App {
   constructor() {}
@@ -33,24 +35,14 @@ class App {
     })
     app.use(log())
     this.server = app.listen(3001)
+    this.io = socketIo(this.server)
+    useSocketServer(this.io, {
+      controllers: [MessageController]
+    })
     console.log(`listen on 3001
         click http://localhost:3001/
     `)
   }
-  public startWs() {
-    this.io = socketIo(this.server)
-    this.io.on('connect', (socket: any) => {
-      console.log('Connected client on port %s.', 3001)
-      socket.on('message', (m: any) => {
-        console.log('[server](message): %s', JSON.stringify(m))
-        this.io.emit('message', m)
-      })
-      socket.on('disconnect', () => {
-        console.log('Client disconnected')
-      })
-    })
-  }
 }
 const app = new App()
 app.startHttp()
-app.startWs()
