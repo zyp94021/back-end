@@ -11,7 +11,7 @@ interface IUserModel extends IUser, Document {
 const UserSchema: Schema = new Schema({
   time: Date,
   password: { type: String, required: true },
-  username: { type: String, required: true }
+  username: { type: String, required: true },
 })
 UserSchema.pre('save', function(next) {
   let now = new Date()
