@@ -17,7 +17,7 @@ export class UserServive {
     return new ReMsg({ username: newUser.username })
   }
   static async login({ username, password }) {
-    const user = (await User.findOne({ username, password })).toObject()
+    const user = await User.findOne({ username, password })
     if (user) {
       const token = jwt.sign({ username: user.username }, 'jwttest')
       return new ReMsg({ username, token })
