@@ -101,6 +101,13 @@
   dependencies:
     "@types/koa" "*"
 
+"@types/koa-sslify@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/koa-sslify/-/koa-sslify-4.0.1.tgz#fde1e591dcf77e99fc4ddcca983656420c020311"
+  integrity sha512-RS0RIQuHp4G7ZR2kMHDw3Lnr0yRB4em50TwFm/tOSCPFaDwyKeU26F6tEULOrkS+J7zYZSB3h2pDTPaNhTEK0w==
+  dependencies:
+    "@types/koa" "*"
+
 "@types/koa@*", "@types/koa@^2.0.48":
   version "2.0.48"
   resolved "http://registry.npm.taobao.org/@types/koa/download/@types/koa-2.0.48.tgz#29162783029d3e5df8b58c55f6bf0d35f78fc39f"

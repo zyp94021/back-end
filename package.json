@@ -8,6 +8,7 @@
     "@types/koa": "^2.0.48",
     "@types/koa-bodyparser": "^4.2.2",
     "@types/koa-router": "^7.0.40",
+    "@types/koa-sslify": "^4.0.1",
     "@types/mongodb": "^3.1.21",
     "@types/mongoose": "^5.3.24",
     "@types/node": "^11.10.5",
@@ -33,8 +34,8 @@
   "scripts": {
     "start": "npx ts-node ./src/app.ts --watch",
     "ts": "npx tsc -w",
-    "ts:build":"npx tsc",
+    "ts:build": "npx tsc",
     "dev": "npx nodemon ./dist/app.js",
-    "run:server":"pm2 start ./dist/app.js"
+    "run:server": "pm2 start ./dist/app.js"
   }
 }

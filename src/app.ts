@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 import * as Koa from 'koa'
 import * as mongoose from 'mongoose'
+import * as fs from 'fs'
 import { log } from './logger'
 import * as socketIo from 'socket.io'
 import { Server } from 'http'
@@ -12,6 +13,7 @@ import * as jwt from 'jsonwebtoken'
 import { UserServive } from './com/service/UserService'
 import { MessageController } from './com/controller/MessageController'
 import { MsgController } from './com/controller/MsgController'
+import { fstat } from 'fs'
 
 const token: { [username: string]: string } = {}
 
