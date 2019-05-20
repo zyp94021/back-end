@@ -15,11 +15,8 @@ export class MsgController {
     return MsgService.delete({ id })
   }
   @Post('/test')
-  async test(@Body()
-  {
-    params: { type, user, message, publickey, signature },
-  }) {
-    JSLogger.log({ type, user, message, publickey, signature })
+  async test(@Body() body) {
+    JSLogger.info(body)
     return {
       action: 'login',
       error: 0,
