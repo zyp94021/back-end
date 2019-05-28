@@ -5,7 +5,7 @@ import {
   OnDisconnect,
   MessageBody,
   OnMessage,
-  SocketIO
+  SocketIO,
 } from 'socket-controllers'
 import { Socket, Server } from 'socket.io'
 
@@ -25,9 +25,10 @@ export class MessageController {
   save(
     @SocketIO() io: Server,
     @ConnectedSocket() socket: Socket,
-    @MessageBody() message: any
+    @MessageBody() message: any,
   ) {
-    io.emit('message', message)
+    console.log(message)
+    io.emit('message', { result: 'ok', message })
     // socket.emit('message', message)
   }
 }

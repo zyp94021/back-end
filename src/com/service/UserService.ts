@@ -5,7 +5,8 @@ import * as jwt from 'jsonwebtoken'
 
 export class UserServive {
   static async register({ username, password }) {
-    const user = (await User.findOne({ username, password })).toObject()
+
+    const user = await User.findOne({ username, password })
     console.log(user)
     if (user) {
       JSLogger.info('用户存在')

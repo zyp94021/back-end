@@ -1,7 +1,6 @@
 import 'reflect-metadata'
 import * as Koa from 'koa'
 import * as mongoose from 'mongoose'
-import * as fs from 'fs'
 import { log } from './logger'
 import * as socketIo from 'socket.io'
 import { Server } from 'http'
@@ -13,7 +12,6 @@ import * as jwt from 'jsonwebtoken'
 import { UserServive } from './com/service/UserService'
 import { MessageController } from './com/controller/MessageController'
 import { MsgController } from './com/controller/MsgController'
-import { fstat } from 'fs'
 
 const token: { [username: string]: string } = {}
 
@@ -33,7 +31,10 @@ class App {
         JSLogger.log(token)
         try {
           const { username } = jwt.verify(token, 'jwttest') as any
-          if (token[username] === token) {
+          // if (token[username] === token) {
+          //   return true
+          // }
+          if (username) {
             return true
           }
           // const user = await UserServive.findOneByUsername({ username })
@@ -48,6 +49,18 @@ class App {
     app.use(log())
     this.server = app.listen(3001)
     this.io = socketIo(this.server)
+    this.io.use((socket, next) => {
+      const token = socket.handshake.query.token
+      console.log(token)
+      // verify token
+      const { username } = jwt.verify(token, 'jwttest') as any
+      console.log(username)
+      if (username) {
+        next()
+      } else {
+        return
+      }
+    })
     useSocketServer(this.io, {
       controllers: [MessageController],
     })
