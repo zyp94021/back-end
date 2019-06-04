@@ -30,7 +30,7 @@ export class MessageController {
     @MessageBody() message: any,
   ) {
     console.log(message)
-    io.emit('message', { result: 'ok', message })
+    socket.emit('message', { result: 'ok', message })
     // socket.emit('message', message)
   }
   @OnMessage('delete')
@@ -40,7 +40,7 @@ export class MessageController {
     @MessageBody() { id },
   ) {
     const result = await MsgService.delete({ id })
-    io.emit('delete', result)
+    socket.emit('delete', result)
   }
   @OnMessage('add')
   async add(
@@ -49,10 +49,11 @@ export class MessageController {
     @MessageBody() { message },
   ) {
     const result = await MsgService.add({ message })
-    io.emit('add', result)
+    socket.emit('add', result)
   }
   @OnMessage('all')
-  all(@SocketIO() io: Server, @ConnectedSocket() socket: Socket) {
-    return MsgService.all()
+  async all(@SocketIO() io: Server, @ConnectedSocket() socket: Socket) {
+    const result = await MsgService.all()
+    socket.emit('all', result)
   }
 }
