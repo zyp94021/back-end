@@ -6,6 +6,7 @@ import {
   MessageBody,
   OnMessage,
   SocketIO,
+  EmitOnSuccess,
 } from 'socket-controllers'
 import { Socket, Server } from 'socket.io'
 import { MsgService } from '../service/MsgService'
@@ -39,8 +40,7 @@ export class MessageController {
     @MessageBody() { id },
   ) {
     const result = await MsgService.delete({ id })
-    console.log(result)
-    io.emit('retureDelete', result)
+    io.emit('delete', result)
   }
   @OnMessage('add')
   async add(
@@ -48,6 +48,11 @@ export class MessageController {
     @ConnectedSocket() socket: Socket,
     @MessageBody() { message },
   ) {
-    io.emit('retureAdd', await MsgService.add({ message }))
+    const result = await MsgService.add({ message })
+    io.emit('add', result)
+  }
+  @OnMessage('all')
+  all(@SocketIO() io: Server, @ConnectedSocket() socket: Socket) {
+    return MsgService.all()
   }
 }
