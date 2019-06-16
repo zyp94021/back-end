@@ -5,4 +5,4 @@ User table
   password
   id
   nick
-  
+  1
